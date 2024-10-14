@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import slider1 from '../Components/Assets/slider1.jpg';
-import slider2 from '../Components/Assets/slider2.jpg';
-import slider3 from '../Components/Assets/slider3.jpg';
-import slider4 from '../Components/Assets/slider4.jpg';
+import { useState, useEffect } from "react";
+import slider1 from "../Components/Assets/slider1.jpg";
+import slider2 from "../Components/Assets/slider2.jpg";
+import slider3 from "../Components/Assets/slider3.jpg";
+import slider4 from "../Components/Assets/slider4.jpg";
 
 function DualSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -64,7 +64,9 @@ function DualSlider() {
       <div className="w-1/2 h-full overflow-hidden">
         <div
           className="flex w-full h-full transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${getNextIndex(currentIndex) * 100}%)` }}
+          style={{
+            transform: `translateX(-${getNextIndex(currentIndex) * 100}%)`,
+          }}
         >
           {slides.map((slide, index) => (
             <img
