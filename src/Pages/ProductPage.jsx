@@ -4,18 +4,8 @@ import Header from "../Components/Header";
 
 // Hardcoded images for the products
 const productImages = {
-  "01": [
-    "src/Components/Assets/slider1.jpg",
-    "src/Components/Assets/slider2.jpg",
-    "src/Components/Assets/slider3.jpg",
-    "src/Components/Assets/slider4.jpg",
-  ],
-  "02": [
-    "src/Components/Assets/slider5.jpg",
-    "src/Components/Assets/slider6.jpg",
-    "src/Components/Assets/slider7.jpg",
-    "src/Components/Assets/slider8.jpg",
-  ],
+  "01": ["/slider1.jpg", "/slider2.jpg", "/slider3.jpg", "/slider4.jpg"],
+  "02": ["/slider5.jpg", "/slider6.jpg", "/slider7.jpg", "/slider8.jpg"],
 };
 
 // Star Rating Component
