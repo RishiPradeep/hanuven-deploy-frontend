@@ -1,11 +1,23 @@
 import { useState, useEffect } from "react";
+import { useCart } from "./CartContext";
+import { useNavigate } from 'react-router-dom'; 
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 
 // Hardcoded images for the products
 const productImages = {
-  "01": ["/slider1.jpg", "/slider2.jpg", "/slider3.jpg", "/slider4.jpg"],
-  "02": ["/slider5.jpg", "/slider6.jpg", "/slider7.jpg", "/slider8.jpg"],
+  "01": [
+    "src/Components/Assets/slider1.jpg",
+    "src/Components/Assets/slider2.jpg",
+    "src/Components/Assets/slider3.jpg",
+    "src/Components/Assets/slider4.jpg",
+  ],
+  "02": [
+    "src/Components/Assets/slider5.jpg",
+    "src/Components/Assets/slider6.jpg",
+    "src/Components/Assets/slider7.jpg",
+    "src/Components/Assets/slider8.jpg",
+  ],
 };
 
 // Star Rating Component
@@ -85,15 +97,56 @@ const ImageCarousel = ({ images }) => {
   );
 };
 
-// Product Info Component
 const ProductInfo = ({ product }) => {
+  const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const navigate = useNavigate();
 
   const handleAddToCart = () => {
-    alert("Added to cart!");
+    const cartItem = {
+      id: product.ProductID, // Use ProductID instead of id
+      name: product.ProductName,
+      price: parseFloat(product.ProductPrice), // Ensure price is a number
+      quantity: quantity,
+      image: product.ProductImage || "default-image-url.jpg" // Use a default image if not available
+    };
+    addToCart(cartItem);
+    alert(`${product.ProductName} added to cart!`);
   };
 
+
+  const handleBuyNow = () => {
+    let price;
+    if (typeof product.ProductPrice === 'string') {
+      // If it's a string, try to remove non-numeric characters and parse
+      price = parseFloat(product.ProductPrice.replace(/[^\d.]/g, ''));
+    } else if (typeof product.ProductPrice === 'number') {
+      // If it's already a number, use it directly
+      price = product.ProductPrice;
+    } else {
+      console.error('Invalid price format:', product.ProductPrice);
+      price = 0; // Default to 0 if the price is in an unexpected format
+    }
+
+    if (isNaN(price)) {
+      console.error('Failed to parse price:', product.ProductPrice);
+      price = 0; // Default to 0 if parsing fails
+    }
+
+    const productData = {
+      product: {
+        id: product.ProductID,
+        name: product.ProductName,
+        price: price,
+        quantity: quantity,
+        image: product.ProductImage || "default-image-url.jpg",
+      }
+    };
+    console.log("Navigating to checkout with product data:", productData);
+    navigate('/checkout', { state: productData });
+  };
+  
   const handleWishlist = () => {
     setIsWishlisted(!isWishlisted);
   };
@@ -138,7 +191,9 @@ const ProductInfo = ({ product }) => {
       </button>
 
       <div className="flex space-x-4 mt-4">
-        <button className="w-full py-2 bg-gray-700 text-white rounded-md hover:bg-black transition-all">
+        <button className="w-full py-2 bg-gray-700 text-white rounded-md hover:bg-black transition-all"
+         onClick={handleBuyNow} 
+        >
           Buy Now
         </button>
         <button
@@ -232,7 +287,7 @@ const ProductPage = () => {
           </button>
         </div>
         <ProductFeatures product={currentProduct} />
-        <ProductInfo product={currentProduct} />
+        <ProductInfo product={products[currentProductIndex]} />
       </div>
       <Footer />
     </div>
